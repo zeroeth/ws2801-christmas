@@ -2,6 +2,11 @@
 #include "WS2801.h"
 #include "hue2rgb.h"
 
+// led     jumpers
+// white - black - VCC
+// black - green - GND
+// red   - red   - CLK
+// blue  - blue  - DAT
 int dataPin = 2;
 int clockPin = 3;
 
@@ -156,8 +161,8 @@ void random_brightness() {
   for (int i=0; i < strip.numPixels(); i++) {
     lights[i].tick();
     // TODO randomly wiggle the hue (vs cycling it?)
-    //0.427 MAJESTIC
-    set_color_at(i, hsl_color(lights[i].color(), lights[i].saturation(), lights[i].brightness()));
+    //set_color_at(i, hsl_color(lights[i].color(), lights[i].saturation(), lights[i].brightness()));
+    set_color_at(i, hsl_color(lights[i].color(), (1.0-max_brightness) + lights[i].brightness(), lights[i].brightness()));
   }
 }
 
