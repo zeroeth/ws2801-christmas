@@ -79,7 +79,7 @@ class Light {
 float global_hue;
 
 Light::Light() {
-  hue = global_hue;
+  hue = random(360.0)/360.0;
   saturation_value = 0.85;
 
   //hue = random(360)/360.0;
@@ -116,6 +116,7 @@ void Light::tick() {
   else {
     value -= speed;
     if(value <= min_brightness) {
+      hue = random(360.0)/360.0;
       value = min_brightness;
       increasing = true;
     }
@@ -161,8 +162,8 @@ void random_brightness() {
   for (int i=0; i < strip.numPixels(); i++) {
     lights[i].tick();
     // TODO randomly wiggle the hue (vs cycling it?)
-    //set_color_at(i, hsl_color(lights[i].color(), lights[i].saturation(), lights[i].brightness()));
-    set_color_at(i, hsl_color(lights[i].color(), (1.0-max_brightness) + lights[i].brightness(), lights[i].brightness()));
+    set_color_at(i, hsl_color(lights[i].color(), lights[i].saturation(), lights[i].brightness()));
+    //set_color_at(i, hsl_color(lights[i].color(), (1.0-max_brightness) + lights[i].brightness(), lights[i].brightness()));
   }
 }
 
