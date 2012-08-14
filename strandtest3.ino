@@ -80,7 +80,7 @@ float global_hue;
 
 Light::Light() {
   hue = random(360.0)/360.0;
-  saturation_value = 0.85;
+  //saturation_value = 0.85;
 
   //hue = random(360)/360.0;
 
@@ -93,11 +93,11 @@ Light::Light() {
   //saturation_value = 1.0;
 
   //hue = 0.25; // chartues
-  //saturation_value = 1.0;
+  saturation_value = 1.0;
 
   hue_speed = 0.001;
   brightness_value = random(100)/100.0;
-  speed = random(100)/10000.0;
+  speed = random(100)/10000.0 + 0.0001;
   increasing = true;
 }
 
@@ -117,7 +117,7 @@ void Light::tick() {
     brightness_value -= speed;
     if(brightness_value <= min_brightness) {
       hue = random(360.0)/360.0;
-      speed = random(100)/10000.0;
+      speed = random(100)/10000.0 + 0.0001;
 
       brightness_value = min_brightness;
       increasing = true;
@@ -152,15 +152,15 @@ void setup() {
   for(int i = 0; i < light_count; i++) {
     lights[i] = Light();
   }
-  //random_hue_fill();
-  random_brightness();
+  hue_sequence_fill();
+  //tick_and_render_lights();
 
   Serial.begin(9600);
   delay(1000);
 }
 
 
-void random_brightness() {
+void tick_and_render_lights() {
   for (int i=0; i < strip.numPixels(); i++) {
     lights[i].tick();
     // TODO randomly wiggle the hue (vs cycling it?)
@@ -169,23 +169,23 @@ void random_brightness() {
   }
 }
 
-void random_hue_fill() {
+void hue_sequence_fill() {
   int start = random(360);
   uint32_t color;
   int type = random(100);
 
   for (int i=0; i < strip.numPixels(); i++) {
     // #1 spread hue
-    //color = Wheel( (start+((255/strip.numPixels())*i)) % 255 );
+    color = Wheel( (start+((255/strip.numPixels())*i)) % 255 );
 
-    if(type < 50) {
+    //if(type < 50) {
       // #2 random throughout
-      color = Wheel( random(360) );
-    }
-    else {
+    //  color = Wheel( random(360) );
+    //}
+    //else {
       // #3 solid random
-      color = Wheel( start );
-    }
+    //  color = Wheel( start );
+   // }
 
     set_color_at(i, color);
   }
@@ -195,21 +195,20 @@ void random_hue_fill() {
 void loop() {
   // #1 just shift
   //array_shift_index(random(25));
-  //array_shift_index(1);
+  array_shift_index(1);
 
   // #2 push random? (broken)
   //int val = random(20,150);
   //color_push(Color(20,20,val));
 
   // #3 refill each time
-  //random_hue_fill();
+  //hue_sequence_fill();
 
   // #4 pulsate
-  random_brightness();
+  //tick_and_render_lights();
 
   // display
   display_colors();
-  //delay(4000);
   delay(10);
 }
 
