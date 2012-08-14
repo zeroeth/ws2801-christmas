@@ -68,7 +68,7 @@ class Light {
 
   private:
 
-  float value;
+  float brightness_value;
   float hue;
   float hue_speed;
   float speed;
@@ -96,7 +96,7 @@ Light::Light() {
   //saturation_value = 1.0;
 
   hue_speed = 0.001;
-  value = random(100)/100.0;
+  brightness_value = random(100)/100.0;
   speed = random(100)/10000.0;
   increasing = true;
 }
@@ -107,17 +107,19 @@ void Light::tick() {
   //  hue = 0.0;
   // }
   if(increasing) {
-    value += speed;
-    if(value >= max_brightness) {
-      value = max_brightness;
+    brightness_value += speed;
+    if(brightness_value >= max_brightness) {
+      brightness_value = max_brightness;
       increasing = false;
     }
   }
   else {
-    value -= speed;
-    if(value <= min_brightness) {
+    brightness_value -= speed;
+    if(brightness_value <= min_brightness) {
       hue = random(360.0)/360.0;
-      value = min_brightness;
+      speed = random(100)/10000.0;
+
+      brightness_value = min_brightness;
       increasing = true;
     }
   }
@@ -132,8 +134,8 @@ float Light::color() {
 }
 
 float Light::brightness() {
-  //return sin(value + millis()/speed) * 0.5 + 0.5;
-  return value;
+  //return sin(brightness_value + millis()/speed) * 0.5 + 0.5;
+  return brightness_value;
 }
 
 Light lights[25];
