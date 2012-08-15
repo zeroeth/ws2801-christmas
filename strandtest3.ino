@@ -176,7 +176,7 @@ void hue_sequence_fill() {
 
   for (int i=0; i < strip.numPixels(); i++) {
     // #1 spread hue
-    color = Wheel( (start+((255/strip.numPixels())*i)) % 255 );
+    color = Wheel( (start+((360/strip.numPixels())*i)) % 360 );
 
     //if(type < 50) {
       // #2 random throughout
@@ -209,7 +209,7 @@ void loop() {
 
   // display
   display_colors();
-  delay(10);
+  delay(80);
 }
 
 // Create a 24 bit color value from R,G,B
