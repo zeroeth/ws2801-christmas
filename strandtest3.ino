@@ -62,6 +62,8 @@ class Light {
 
   Light();
   void tick();
+  void cycle_hue();
+  void loop_brightness();
   float brightness();
   float color();
   float saturation();
@@ -80,19 +82,6 @@ float global_hue;
 
 Light::Light() {
   hue = random(360.0)/360.0;
-  //saturation_value = 0.85;
-
-  //hue = random(360)/360.0;
-
-  //hue = 0.427; // MAJESTIC
-
-  //hue = 0.58888; // CERULEAN
-  //saturation_value = 0.41;
-
-  //hue = 0.95833; // Burgundy... PINK
-  //saturation_value = 1.0;
-
-  //hue = 0.25; // chartues
   saturation_value = 1.0;
 
   hue_speed = 0.001;
@@ -102,10 +91,19 @@ Light::Light() {
 }
 
 void Light::tick() {
-  //hue += hue_speed;
-  //if(hue >= 0.89) {
-  //  hue = 0.0;
-  // }
+  cycle_hue();
+  loop_brightness();
+}
+
+
+void Light::cycle_hue() {
+  hue += hue_speed;
+  if(hue >= 0.89) {
+    hue = 0.0;
+   }
+}
+
+void Light::loop_brightness() {
   if(increasing) {
     brightness_value += speed;
     if(brightness_value >= max_brightness) {
@@ -134,9 +132,9 @@ float Light::color() {
 }
 
 float Light::brightness() {
-  //return sin(brightness_value + millis()/speed) * 0.5 + 0.5;
   return brightness_value;
 }
+
 
 Light lights[25];
 int light_count = 25;
@@ -152,6 +150,7 @@ void setup() {
   for(int i = 0; i < light_count; i++) {
     lights[i] = Light();
   }
+
   hue_sequence_fill();
   //tick_and_render_lights();
 
@@ -165,7 +164,6 @@ void tick_and_render_lights() {
     lights[i].tick();
     // TODO randomly wiggle the hue (vs cycling it?)
     set_color_at(i, hsl_color(lights[i].color(), lights[i].saturation(), lights[i].brightness()));
-    //set_color_at(i, hsl_color(lights[i].color(), (1.0-max_brightness) + lights[i].brightness(), lights[i].brightness()));
   }
 }
 
@@ -175,17 +173,7 @@ void hue_sequence_fill() {
   int type = random(100);
 
   for (int i=0; i < strip.numPixels(); i++) {
-    // #1 spread hue
     color = Wheel( (start+((360/strip.numPixels())*i)) % 360 );
-
-    //if(type < 50) {
-      // #2 random throughout
-    //  color = Wheel( random(360) );
-    //}
-    //else {
-      // #3 solid random
-    //  color = Wheel( start );
-   // }
 
     set_color_at(i, color);
   }
@@ -194,15 +182,11 @@ void hue_sequence_fill() {
 
 void loop() {
   // #1 just shift
-  //array_shift_index(random(25));
   array_shift_index(1);
 
   // #2 push random? (broken)
   //int val = random(20,150);
   //color_push(Color(20,20,val));
-
-  // #3 refill each time
-  //hue_sequence_fill();
 
   // #4 pulsate
   //tick_and_render_lights();
