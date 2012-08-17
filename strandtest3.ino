@@ -78,6 +78,16 @@ class Light {
   bool increasing;
 };
 
+class PositionLight : Light {
+  public:
+
+  int position();
+
+  private:
+
+  int led_position;
+};
+
 float global_hue;
 
 Light::Light() {
@@ -91,7 +101,7 @@ Light::Light() {
 }
 
 void Light::tick() {
-  cycle_hue();
+  //cycle_hue();
   loop_brightness();
 }
 
@@ -151,9 +161,6 @@ void setup() {
     lights[i] = Light();
   }
 
-  hue_sequence_fill();
-  //tick_and_render_lights();
-
   Serial.begin(9600);
   delay(1000);
 }
@@ -182,14 +189,14 @@ void hue_sequence_fill() {
 
 void loop() {
   // #1 just shift
-  array_shift_index(1);
+  //array_shift_index(1);
 
   // #2 push random? (broken)
   //int val = random(20,150);
   //color_push(Color(20,20,val));
 
   // #4 pulsate
-  //tick_and_render_lights();
+  tick_and_render_lights();
 
   // display
   display_colors();
