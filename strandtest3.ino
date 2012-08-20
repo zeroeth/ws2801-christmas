@@ -91,12 +91,12 @@ class PositionLight : Light {
 float global_hue;
 
 Light::Light() {
-  hue = random(360.0)/360.0;
+  hue = global_hue; //random(360.0)/360.0;
   saturation_value = 1.0;
 
   hue_speed = 0.001;
-  brightness_value = random(100)/100.0;
-  speed = random(100)/10000.0 + 0.0001;
+  brightness_value = 0.0;//random(100)/100.0;
+  speed = 0.01;//random(100)/10000.0 + 0.0001;
   increasing = true;
 }
 
@@ -124,8 +124,8 @@ void Light::loop_brightness() {
   else {
     brightness_value -= speed;
     if(brightness_value <= min_brightness) {
-      hue = random(360.0)/360.0;
-      speed = random(100)/10000.0 + 0.0001;
+      //hue = random(360.0)/360.0;
+      //speed = random(100)/10000.0 + 0.0001;
 
       brightness_value = min_brightness;
       increasing = true;
