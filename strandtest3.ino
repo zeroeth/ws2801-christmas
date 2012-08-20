@@ -161,6 +161,7 @@ void setup() {
     lights[i] = Light();
   }
 
+  // move this into a position value, integer or float? and have a view that can handle absolute.. or blending between leds
   lights[0].brightness_value = 0.2;
 
   render_lights();
