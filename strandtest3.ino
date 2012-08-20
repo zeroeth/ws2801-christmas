@@ -3,8 +3,8 @@
 #include "hue2rgb.h"
 
 // led     jumpers
-// white - black - VCC
-// black - green - GND
+// white - black - GND
+// black - green - VCC
 // red   - red   - CLK
 // blue  - blue  - DAT
 int dataPin = 2;
@@ -68,9 +68,9 @@ class Light {
   float color();
   float saturation();
 
+  float brightness_value;
   private:
 
-  float brightness_value;
   float hue;
   float hue_speed;
   float speed;
@@ -155,11 +155,15 @@ void setup() {
   strip.show();
 
   randomSeed(analogRead(0));
-  global_hue = random(360.0)/360.0;
+  global_hue = 0.0;//random(360.0)/360.0;
 
   for(int i = 0; i < light_count; i++) {
     lights[i] = Light();
   }
+
+  lights[0].brightness_value = 0.2;
+
+  render_lights();
 
   Serial.begin(9600);
   delay(1000);
@@ -167,9 +171,18 @@ void setup() {
 
 
 void tick_and_render_lights() {
+  tick_lights();
+  render_lights();
+}
+
+void tick_lights () {
   for (int i=0; i < strip.numPixels(); i++) {
     lights[i].tick();
-    // TODO randomly wiggle the hue (vs cycling it?)
+  }
+}
+
+void render_lights() {
+  for (int i=0; i < strip.numPixels(); i++) {
     set_color_at(i, hsl_color(lights[i].color(), lights[i].saturation(), lights[i].brightness()));
   }
 }
@@ -189,14 +202,14 @@ void hue_sequence_fill() {
 
 void loop() {
   // #1 just shift
-  //array_shift_index(1);
+  array_shift_index(1);
 
   // #2 push random? (broken)
   //int val = random(20,150);
   //color_push(Color(20,20,val));
 
   // #4 pulsate
-  tick_and_render_lights();
+  //tick_and_render_lights();
 
   // display
   display_colors();
